@@ -5,13 +5,27 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
+/**
+ * Inventory for a Magic Chest. Implements each half as a separate set of slots.
+ */
 public class InventoryMagicChest {
 	
-	
+	/**
+	 * Gets the inventory from word storage corresponding to the identifier provided
+	 * 
+	 * @param w				The current world
+	 * @param identifier	Name of inventory
+	 * @return	A matching inventory object
+	 */
 	public static InventoryMagicChest getInventory(World w, String identifier) {
 		return MagicChestCollection.getCollection(w).getInventory(identifier);
 	}
 	
+	/**
+	 * Loads an inventory from nbt data
+	 * @param collection	The collection this chest belongs to
+	 * @param compound		nbt data for the inventory
+	 */
 	public static InventoryMagicChest fromNBT(MagicChestCollection collection, NBTTagCompound compound) {
 		return new InventoryMagicChest(collection, compound);
 	}
@@ -35,20 +49,46 @@ public class InventoryMagicChest {
 		parent = collection;
 	}
 	
-	public String getCommandSenderName() {return null;}
+	/**
+	 * Gets the maximum stack size slots in this inventory can take.
+	 */
+	public int getInventoryStackLimit() {
+		return 64;
+	}
 	
-	public int getInventoryStackLimit() {return 64;}
-	
+	/**
+	 * Gets the name of this inventory for display
+	 */
 	public String getName() {
 		return inventoryName;
 	}
 	
-	public int getSizeInventory() {return 27;}
+	/**
+	 * Gets the number of slots available in this inventory
+	 */
+	public int getSizeInventory() {
+		return 27;
+	}
 	
+	/**
+	 * Gets the stack from the indicated slot index.
+	 * 
+	 * @param primary	True if we are accessing the top half of the chest
+	 * @param index		Index of the slot
+	 * @return	The stack in the slot, or null
+	 */
 	public ItemStack getStackInSlot(boolean primary, int index) {
 		return getContents(primary)[index];
 	}
 	
+	/**
+	 * Reduces the size of the stack in the chosen slot by the specified amount
+	 * 
+	 * @param primary	True if we are accessing the top half of this chest
+	 * @param index		Index of the slot to access
+	 * @param count		Number of items to subtract
+	 * @return	The items removed from the slot
+	 */
 	public ItemStack decrStackSize(boolean primary, int index, int count) {
 		ItemStack stack = null;
 		ItemStack[] contents = getContents(primary);
@@ -68,6 +108,13 @@ public class InventoryMagicChest {
         return stack;
 	}
 	
+	/**
+	 * Removes the contents of a slot.
+	 * 
+	 * @param primary	True if we are accessing the top half of this chest
+	 * @param index		Index of the slot to access
+	 * @return			The contents of the slot, or null.
+	 */
 	public ItemStack getStackInSlotOnClosing(boolean primary, int index) {
 		ItemStack[] contents = getContents(primary);
 		if (contents[index] != null) {
@@ -78,10 +125,24 @@ public class InventoryMagicChest {
         return null;
 	}
 	
+	/**
+	 * Gets the inventory slots for the specified half of this chest.
+	 * 
+	 * @param primary	True if we are accessing the top half of this chest
+	 * 
+	 * @return	An array of slots
+	 */
 	public ItemStack[] getContents(boolean primary) {
 		return primary ? top : bottom;
 	}
 	
+	/**
+	 * Sets the contents of a slot.
+	 * 
+	 * @param primary	True if we are accessing the top half of this chest
+	 * @param index		Index of the slot to modify
+	 * @param stack		Contents to place into the slot
+	 */
 	public void setInventorySlotContents(boolean primary, int index, ItemStack stack) {
 		ItemStack[] contents = getContents(primary);
 		contents[index] = stack;
@@ -91,6 +152,9 @@ public class InventoryMagicChest {
         parent.markDirty();
 	}
 	
+	/**
+	 * Empties this chest.
+	 */
 	public void clear() {
 		for (int i = 0; i < top.length; ++i) {
             top[i] = null;
@@ -100,6 +164,9 @@ public class InventoryMagicChest {
         }
 	}
 	
+	/**
+	 * Checks if there are any items in this inventory
+	 */
 	public boolean isEmpty() {
 		for (int i = 0; i < top.length; i++) {
 			if (top[i] != null && top[i].stackSize > 0) {
@@ -114,6 +181,9 @@ public class InventoryMagicChest {
 		return true;
 	}
 	
+	/**
+	 * Loads this chest's contents from nbt data
+	 */
 	public void readFromNBT(NBTTagCompound compound) {
         NBTTagList list = compound.getTagList("Items_Top", 10);
         inventoryName = compound.getString("CustomName");
@@ -135,7 +205,10 @@ public class InventoryMagicChest {
             }
         }
     }
-
+	
+	/**
+	 * Saves this chest's contents to nbt data
+	 */
     public void writeToNBT(NBTTagCompound compound) {
         NBTTagList list = new NBTTagList();
         for (int i = 0; i < top.length; i++) {

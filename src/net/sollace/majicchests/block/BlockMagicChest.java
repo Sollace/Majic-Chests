@@ -18,6 +18,10 @@ import net.minecraft.world.World;
 import net.sollace.majicchests.item.ItemKey;
 import net.sollace.majicchests.tileentity.TileEntityMagicChest;
 
+/**
+ * The block for a magic chest. Extends from BlockChest and overrides functionality as needed.
+ * 
+ */
 public class BlockMagicChest extends BlockChest {
 
 	public BlockMagicChest() {
@@ -97,15 +101,27 @@ public class BlockMagicChest extends BlockChest {
         return true;
     }
 	
+    /**
+     * Checks if the player has an item that may serve as a key for this chest
+     */
 	public boolean hasAKey(EntityPlayer player) {
 		ItemStack stack = player.getCurrentEquippedItem();
 		return stack != null && stack.hasDisplayName() && stack.getItem() instanceof ItemKey;
 	}
 	
+	/**
+	 * Attempts to associate this chest with any key held by the player
+	 * @param w			The current world
+	 * @param pos		Current block position
+	 * @param player	The player attempting to access this chest
+	 */
 	public void unlock(World w, BlockPos pos, EntityPlayer player) {
 		((TileEntityMagicChest)w.getTileEntity(pos)).unlock(player.getCurrentEquippedItem());
 	}
 	
+	/**
+	 * Locks this chest
+	 */
 	public void lock(World w, BlockPos pos) {
 		((TileEntityMagicChest)w.getTileEntity(pos)).lock();
 	}

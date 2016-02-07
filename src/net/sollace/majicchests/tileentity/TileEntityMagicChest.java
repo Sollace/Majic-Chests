@@ -20,28 +20,46 @@ public class TileEntityMagicChest extends TileEntityChest {
 		super();
 	}
 	
+	/**
+	 * Returns true if this chest represents the upper half of a double chest.
+	 */
 	private boolean isPrimary() {
 		return primary;
 	}
 	
+	/**
+	 * Sets this chest as the upper part of a double chest.
+	 * @param prime
+	 */
 	public void setPrimary(boolean prime) {
 		primary = prime;
 	}
 	
-	public boolean hasCustomName() {return true;}
+	public boolean hasCustomName() {
+		return true;
+	}
 	
-	public String getCommandSenderName() {return "Majic Chest: " + getInventoryIdentifier();}
+	public String getCommandSenderName() {
+		return "Majic Chest: " + getInventoryIdentifier();
+	}
 	
-	public String getGuiID() {return super.getGuiID();}
-	
+	/**
+	 * Gets the inventory contents this chest is associated with.
+	 */
 	public InventoryMagicChest getInventory() {
 		return InventoryMagicChest.getInventory(worldObj, getInventoryIdentifier());
 	}
 	
+	/**
+	 * Gets the identifier used to look up contents for this chest
+	 */
 	public String getInventoryIdentifier() {
 		return getLockCode().getLock();
 	}
 	
+	/**
+	 * Checks if this chest has an associated to access an inventory.
+	 */
 	public boolean hasKey() {
 		return super.isLocked();
 	}
@@ -50,11 +68,17 @@ public class TileEntityMagicChest extends TileEntityChest {
 		return !hasKey();
 	}
 	
+	/**
+	 * Associates this chest with the provided key
+	 */
 	public void unlock(ItemStack keyIn) {
 		setPrimary(true);
 		setLockCode(new LockCode(keyIn.getDisplayName()));
 	}
 	
+	/**
+	 * Disassociates this chest with any contents.
+	 */
 	public void lock() {
 		setLockCode(null);
 	}
