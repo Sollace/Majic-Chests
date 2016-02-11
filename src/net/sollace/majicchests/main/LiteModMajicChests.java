@@ -12,15 +12,13 @@ import com.blazeloader.api.recipe.ApiRecipe;
 import com.blazeloader.bl.mod.BLMod;
 import com.blazeloader.event.listeners.StartupListener;
 import com.blazeloader.event.listeners.WorldListener;
+import com.blazeloader.event.listeners.args.EntitySpawnEventArgs;
 import com.blazeloader.util.version.BuildType;
 import com.blazeloader.util.version.type.ModVersion;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.sollace.majicchests.block.BlockMagicChest;
@@ -148,16 +146,16 @@ public class LiteModMajicChests implements BLMod, StartupListener, WorldListener
 		MagicChestCollection.initWorld(world);
 	}
 	
+	/**
+     * Called when an entity is spawned in the world.
+     */
+	public void onEntitySpawned(World world, EntitySpawnEventArgs args) {}
+	
 	public static class MyItems {
 		public static ItemKey key;
 	}
 	
 	public static class MyBlocks {
 		public static BlockMagicChest chest;
-	}
-
-	@Override
-	public void onEntitySpawned(World world, Entity entity) {
-		
 	}
 }
